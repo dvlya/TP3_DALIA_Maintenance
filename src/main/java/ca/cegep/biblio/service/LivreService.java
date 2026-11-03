@@ -10,6 +10,14 @@ import java.util.List;
 /** Logique métier de la bibliothèque. */
 @Service
 public class LivreService {
+    private static final double FRAIS_JEUNESSE = 0.10;
+    private static final double FRAIS_SCIENCE = 0.50;   
+    private static final double FRAIS_AUTRE = 0.25;
+    private static final double PLAFOND_JEUNESSE = 5;
+    private static final double PLAFOND_SCIENCE = 20;
+    private static final double PLAFOND_AUTRE = 10;
+    private static final double anneePublicationPassee = 1450;
+    private static final double anneePublicationFutur = 2100;
 
     private final LivreRepository repository;
 
@@ -32,7 +40,7 @@ public class LivreService {
         if (auteur == null || auteur.isBlank()) {
             throw new IllegalArgumentException("L'auteur est obligatoire");
         }
-        if (anneePublication < 1450 || anneePublication > 2100) {
+        if (anneePublication < anneePublicationPassee || anneePublication > anneePublicationFutur) {
             throw new IllegalArgumentException("L'année de publication est invalide");
         }
         Livre livre = new Livre(null, titre, auteur, isbn, anneePublication, categorie);
@@ -47,7 +55,7 @@ public class LivreService {
         if (auteur == null || auteur.isBlank()) {
             throw new IllegalArgumentException("L'auteur est obligatoire");
         }
-        if (anneePublication < 1450 || anneePublication > 2100) {
+        if (anneePublication < anneePublicationPassee || anneePublication > anneePublicationFutur) {
             throw new IllegalArgumentException("L'année de publication est invalide");
         }
         livre.setTitre(titre);
@@ -85,19 +93,19 @@ public class LivreService {
         double frais = 0;
         if (joursRetard > 0) {
             if (categorie.equals("JEUNESSE")) {
-                frais = joursRetard * 0.10;
-                if (frais > 5) {
-                    frais = 5;
+                frais = joursRetard * FRAIS_JEUNESSE;
+                if (frais > PLAFOND_JEUNESSE) {
+                    frais = PLAFOND_JEUNESSE;
                 }
             } else if (categorie.equals("SCIENCE")) {
-                frais = joursRetard * 0.50;
-                if (frais > 20) {
-                    frais = 20;
+                frais = joursRetard * FRAIS_SCIENCE;
+                if (frais > PLAFOND_SCIENCE) {
+                    frais = PLAFOND_SCIENCE;
                 }
             } else {
-                frais = joursRetard * 0.25;
-                if (frais > 10) {
-                    frais = 10;
+                frais = joursRetard * FRAIS_AUTRE;
+                if (frais > PLAFOND_AUTRE) {
+                    frais = PLAFOND_AUTRE;
                 }
             }
         }
