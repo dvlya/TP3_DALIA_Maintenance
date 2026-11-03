@@ -35,7 +35,6 @@ class LivreServiceTest {
     // ---------- 1 test simple (sans mock) ----------
 
     @Test
-    @Disabled("À implémenter")
     void calculerFraisRetard_longRetard_plafonneLeMontant() {
 
         //Arrange
@@ -50,7 +49,6 @@ class LivreServiceTest {
     // ---------- 1 test sur une exception (assertThrows) ----------
 
     @Test
-    @Disabled("À implémenter")
     void emprunter_livreDejaEmprunte_lanceIllegalStateException() {
         // Arrange
     Long id = 1L;
@@ -79,7 +77,6 @@ class LivreServiceTest {
     // ---------- 1 test avec mock (when / thenReturn / verify) ----------
 
     @Test
-    @Disabled("À implémenter")
     void emprunter_livreDisponible_marqueIndisponibleEtSauvegarde() {
     Long id = 1L;
     Livre livre = new Livre();
