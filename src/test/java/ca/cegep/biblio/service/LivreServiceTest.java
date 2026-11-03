@@ -1,6 +1,16 @@
 package ca.cegep.biblio.service;
 
+
+import ca.cegep.biblio.model.Livre;
 import ca.cegep.biblio.repository.LivreRepository;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +37,11 @@ class LivreServiceTest {
     @Test
     @Disabled("À implémenter")
     void calculerFraisRetard_longRetard_plafonneLeMontant() {
+
+        //Arrange
+        double resultat = service.calculerFraisRetard("science", 100);
+        assertEquals(5.0, resultat);
+
         // À tester : pour une catégorie donnée, un très grand nombre de jours de retard
         // ne dépasse jamais le plafond de cette catégorie.
         // Indice : la méthode ne dépend pas du repository.
@@ -37,19 +52,49 @@ class LivreServiceTest {
     @Test
     @Disabled("À implémenter")
     void emprunter_livreDejaEmprunte_lanceIllegalStateException() {
+        // Arrange
+    Long id = 1L;
+    Livre livre = new Livre();
+    livre.setDisponible(true);
+
+    when(repository.findById(id)).thenReturn(java.util.Optional.of(livre));
+    when(repository.save(livre)).thenReturn(livre);
+     // Act
+    Livre resultat = service.emprunter(id);
+     // Assert
+    assertThrows(IllegalStateException.class)
+    verify(repository).save(livre);
+      
+
+
+    
+        // long id = ;
+        // Livre livre = new Livre();
+  
+    }
         // À tester : emprunter un livre dont disponible == false lance une IllegalStateException.
         // Indice : le repository (mock) doit retourner ce livre pour son id.
-    }
+
 
     // ---------- 1 test avec mock (when / thenReturn / verify) ----------
 
     @Test
     @Disabled("À implémenter")
     void emprunter_livreDisponible_marqueIndisponibleEtSauvegarde() {
-        // À tester : emprunter un livre disponible le rend indisponible
-        // et appelle repository.save(...) exactement une fois.
-        // Définissez le comportement du mock avec when(...).thenReturn(...).
-    }
-}
+    Long id = 1L;
+    Livre livre = new Livre();
+    livre.setDisponible(false);
+
+    when(repository.findById(id)).thenReturn(java.util.Optional.of(livre));
+
+    assertEquals("ce livre est deja emprunter",assertThrows(IllegalStateException.class, () -> service.emprunter(id)));
+
+    verify(repository).save(livre);
+      
+
+
+
+  
+    }}
 
 
