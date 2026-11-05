@@ -36,14 +36,6 @@ API REST de gestion d'une petite bibliothèque (Spring Boot 3.5, Java 25, archit
 
 ---
 
-> Remplacez le contenu ci-dessous par vos réponses du TP (voir `ENONCE_TP.md`).
->Questions d"examen A1
-1.
-modele:classe qui reprentes les objest de livre
-controleur:acces au service
-logique metier:livre service
-> Questions d’examen A1
-
 Questions d"examen A1
 1.
 -Modèle : la classe qui représente les données d’un livre
