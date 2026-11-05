@@ -16,8 +16,8 @@ public class LivreService {
     private static final double PLAFOND_JEUNESSE = 5;
     private static final double PLAFOND_SCIENCE = 20;
     private static final double PLAFOND_AUTRE = 10;
-    private static final double anneePublicationPassee = 1450;
-    private static final double anneePublicationFutur = 2100;
+    private static final int ANNEE_PUBLICATION_MIN = 1450;
+    private static final int ANNEE_PUBLICATION_MAX = 2100;
 
     private final LivreRepository repository;
 
@@ -40,8 +40,10 @@ public class LivreService {
         if (auteur == null || auteur.isBlank()) {
             throw new IllegalArgumentException("L'auteur est obligatoire");
         }
-        if (anneePublication < 1450 || anneePublication > 2100) {
-            throw new IllegalArgumentException("L'année de publication est invalide");
+        if (anneePublication < ANNEE_PUBLICATION_MIN
+                || anneePublication > ANNEE_PUBLICATION_MAX) {
+            throw new IllegalArgumentException(
+                    "L'année de publication est invalide");
         }
         Livre livre = new Livre(null, titre, auteur, isbn, anneePublication, categorie);
         return repository.save(livre);
