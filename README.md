@@ -67,7 +67,7 @@ Questions d"examen A1
 > Questions d’examen A3 — Tests Swagger
 
 | # | Appel | Résultat attendu | Signification du code HTTP |
-|---|---|---|---|---|
+|---|---|---|---|
 | 1 | `GET /api/livres` | 200, liste de trois livres au démarrage |liste affichee|
 | 2 | `POST /api/livres` avec un livre valide | 201: livre créé avec un identifiant | livre créée | 
 | 3 | `POST /api/livres` avec un titre vide | 400: Le titre est obligatoire  | données invalides |
