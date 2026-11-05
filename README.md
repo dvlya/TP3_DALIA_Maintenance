@@ -67,4 +67,12 @@ Questions d"examen A1
    - Si le livre est introuvable : 404
    -  déjà emprunté : 409
 
+## Partie D — Code Smells
+
+| Code Smell | Fichier | Ligne avant correction | Raison |
+|---|---|---|---|
+| Duplicated Code | `LivreService.java` | 35 à 45 et 52 à 60 | Les mêmes validations sont répétées dans `creer` et `modifier`. On les extrait dans `validerLivre()` avec Extract Method. |
+| Magic Numbers | `LivreService.java` | 43 et 58 | Les années/frais et plafond sont écrites directement dans les validations. On les remplace par des constantes nommées. |
+| Long Method | `LivreService.java` | 92 à 113 | `calculerFraisRetard` contient plusieurs conditions imbriquées et des calculs répétés. On déplace les tarifs et le calcul dans l’enum `Categorie` avec Extract Class |
+
    
