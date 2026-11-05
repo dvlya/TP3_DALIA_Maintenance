@@ -104,6 +104,20 @@ La version `1.0.0` correspond à la première livraison stable de l’API.
 Le tag Git `v1.0.0` déclenche les tests, la publication de l’image
 sur GHCR et la création de la Release avec le JAR.
 
+## — Couverture JaCoCo
+
+| Mesure | Éléments couverts | Couverture |
+|---|---|---|
+| Lignes | 51 / 126 | 40,48 % |
+| Instructions | 222 / 535 | 41,50 % |
+| Branches | 6 / 25 | 24,00 % |
+
+Pour améliorer la couverture, on pourrait tester les données invalides,
+les livres introuvables, le retour d’un livre et les autres catégories
+de frais.Plusieurs validations et cas alternatifs du service ne sont pas couverts.
+Le rapport est généré avec JaCoCo 0.8.14 et publié comme artefact
+par le workflow CI.
+
 ### Liens
 
 - [GitHub Actions](https://github.com/dvlya/TP3_DALIA_Maintenance/actions)
