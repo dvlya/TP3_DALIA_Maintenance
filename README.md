@@ -74,3 +74,40 @@ Questions d"examen A1
 | 4 | `POST /api/livres/1/emprunter` deux fois |409:  le livre est déjà emprunté  |  409 : conflit car deja emprunter|
 | 5 | `GET /api/livres/2/frais-retard?joursRetard=100` | 200, frais de 20 $ | calcul réussi |
 
+
+## Partie E — Livraison et test dans Codespaces
+
+### Image publiée
+
+L’image est publiée sur GHCR avec le tag Git de la version :
+
+`ghcr.io/dvlya/biblio-api:v1.0.0`
+
+### Commandes utilisées
+
+```bash
+docker login ghcr.io -u dvlya
+docker pull ghcr.io/dvlya/biblio-api:v1.0.0
+docker run -d --name biblio-release -p 8080:8080 ghcr.io/dvlya/biblio-api:v1.0.0
+curl -i http://localhost:8080/api/livres
+```
+
+### Résultat
+
+La requête retourne les trois livres initiaux au format JSON.
+
+Swagger est accessible depuis l’adresse du port 8080 redirigé
+par Codespaces
+### Version initiale
+
+La version `1.0.0` correspond à la première livraison stable de l’API.
+Le tag Git `v1.0.0` déclenche les tests, la publication de l’image
+sur GHCR et la création de la Release avec le JAR.
+
+### Liens
+
+- [GitHub Actions](https://github.com/dvlya/TP3_DALIA_Maintenance/actions)
+- [Pull Requests](https://github.com/dvlya/TP3_DALIA_Maintenance/pulls)
+- [Releases](https://github.com/dvlya/TP3_DALIA_Maintenance/releases)
+- [Image GHCR](https://github.com/users/dvlya/packages/container/package/biblio-api)
+
