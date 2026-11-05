@@ -41,3 +41,9 @@ jobs:
           name: application-jar
           path: target/*.jar
           if-no-files-found: error
+      - name: Publier le rapport JaCoCo
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: rapport-jacoco-java-${{ matrix.java-version }}
+          path: target/site/jacoco/
