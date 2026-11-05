@@ -42,12 +42,9 @@ class LivreServiceTest {
         // Indice : la méthode ne dépend pas du repository.
 
         //Arrange
-        double resultat = service.calculerFraisRetard("science", 100);
+        double resultat = service.calculerFraisRetard("SCIENCE", 100);
         double validationFrais = 20.0;
         assertEquals(validationFrais, resultat);  }
-
-        
-    }
 
     // ---------- 1 test sur une exception (assertThrows) ----------
         // À tester : emprunter un livre dont disponible == false lance une IllegalStateException.
@@ -69,7 +66,9 @@ class LivreServiceTest {
     
     assertEquals("Ce livre est déjà emprunté",exception.getMessage());
     
-    verify(repository.save());
+  //  verify(repository.save());
+    }
+        
 
 
     // ---------- 1 test avec mock (when / thenReturn / verify) ----------
@@ -89,7 +88,7 @@ class LivreServiceTest {
      // Act
     Livre resultat = service.emprunter(id);
      // Assert
-    assertThrows(IllegalStateException.class)
+    assertFalse(resultat.isDisponible());
     verify(repository).save(livre);
       
       

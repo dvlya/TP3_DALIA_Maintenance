@@ -3,40 +3,117 @@ name: CI
 on:
   push:
     branches: [master]
+    tags: ['v*.*.*']
   pull_request:
     branches: [master]
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: main
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        java-version: [ '21', '25' ]
+        java: ['21', '25']
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Recuperer le code
+        uses: actions/checkout@v5
 
-      - name: Configurer le JDK [21 - 25]
+      - name: Configurer Java
         uses: actions/setup-java@v5
         with:
-          java-version: ${{ matrix.java-version }}
-          distribution: "temurin"
+          java-version: ${{ matrix.java }}
+          distribution: temurin
           cache: maven
 
-      - name : Fournir access au runner
+      - name: Rendre mvnw executable
         run: chmod +x mvnw
-  
-      - name: Build et tester
-        run: ./mvnw -B clean verify
 
-      - name: Publier le rapport de tests
+      - name: Compiler et executer les tests
+        run: ./mvnw -B clean verify -Djava.version=${{ matrix.java }}
+
+      - name: Publier le rapport JaCoCo
+        if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: rapport-jacoco
-          path: target/site/jacoco/index.html
+          name: rapport-jacoco-java-${{ matrix.java }}
+          path: target/site/jacoco/
+
+      - name: Publier le JAR
+        if: matrix.java == '25'
+        uses: actions/upload-artifact@v5
+        with:
+          name: application-jar
+          path: target/*.jar
+          if-no-files-found: error
+
+  build-and-push-image:
+    needs: build-and-test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v5
+
+      - name: Verifier le format du tag
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          [[ "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+
+      - name: Recuperer le JAR deja construit
+        uses: actions/download-artifact@v5
+        with:
+          name: application-jar
+          path: target/
+
+      - name: Connexion a GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.REGISTRY }}
+          username: ${{ vars.REGISTRY_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Configurer Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Construire et publier l'image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ vars.REGISTRY }}/${{ vars.REGISTRY_USERNAME }}/biblio-api:${{ github.ref_name }}
+
+  release:
+    needs: build-and-push-image
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v5
+
+      - name: Recuperer le JAR
+        uses: actions/download-artifact@v5
+        with:
+          name: application-jar
+          path: target/
+
+      - name: Creer la Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" target/*.jar \
+            --verify-tag \
+            --title "$TAG" \
+            --generate-notes
