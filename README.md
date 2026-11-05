@@ -36,9 +36,6 @@ API REST de gestion d'une petite bibliothèque (Spring Boot 3.5, Java 25, archit
 
 ---
 
-> Remplacez le contenu ci-dessous par vos réponses du TP (voir `ENONCE_TP.md`).
-> Questions d’examen A1
-
 Questions d"examen A1
 1.
 -Modèle : la classe qui représente les données d’un livre
@@ -67,4 +64,13 @@ Questions d"examen A1
    - Si le livre est introuvable : 404
    -  déjà emprunté : 409
 
-   
+> Questions d’examen A3 — Tests Swagger
+
+| # | Appel | Résultat attendu | Signification du code HTTP |
+|---|---|---|---|
+| 1 | `GET /api/livres` | 200, liste de trois livres au démarrage |liste affichee|
+| 2 | `POST /api/livres` avec un livre valide | 201: livre créé avec un identifiant | livre créée | 
+| 3 | `POST /api/livres` avec un titre vide | 400: Le titre est obligatoire  | données invalides |
+| 4 | `POST /api/livres/1/emprunter` deux fois |409:  le livre est déjà emprunté  |  409 : conflit car deja emprunter|
+| 5 | `GET /api/livres/2/frais-retard?joursRetard=100` | 200, frais de 20 $ | calcul réussi |
+
