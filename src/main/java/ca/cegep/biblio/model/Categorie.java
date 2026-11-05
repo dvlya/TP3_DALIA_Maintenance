@@ -15,7 +15,7 @@ public enum Categorie {
     public double calculerFrais(int joursRetard) {
         if(joursRetard <= 0) {
         return 0;}
-        return Math.min(joursRetard * fraisParJour, plafond)}
+        return Math.min(joursRetard * fraisParJour, plafond);}
 
     public static Categorie depuis(String categorie) {
         return switch (categorie) {
