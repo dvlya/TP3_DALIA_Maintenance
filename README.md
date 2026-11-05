@@ -37,3 +37,39 @@ API REST de gestion d'une petite bibliothèque (Spring Boot 3.5, Java 25, archit
 ---
 
 > Remplacez le contenu ci-dessous par vos réponses du TP (voir `ENONCE_TP.md`).
+>Questions d"examen A1
+1.
+modele:classe qui reprentes les objest de livre
+controleur:acces au service
+logique metier:livre service
+> Questions d’examen A1
+
+Questions d"examen A1
+1.
+-Modèle : la classe qui représente les données d’un livre
+   - Contrôleur :reçoit les requêtes HTTP et appelle le service
+   - Logique métier : dans livreService et contient les règles comme l’emprunt et le calcul des frais
+
+2. GestionnaireErreurs
+
+   Il transforme les exceptions en réponses HTTP
+   - Livre introuvable : 404
+   - Double emprunt : 409
+
+
+3. stockage des donnee
+
+    ils sont sotckee en mémoire dans LivreRepository
+   Au redémarrage, les modifications sont perdues et les trois livres de départ sont recréés,donc pas de persistance.
+
+4. le trajet de `POST /api/livres/1/emprunter` 
+
+   - LivreController.emprunter(1) reçoit la requête
+   - Il appelle `LivreService.emprunter(1)`
+   - Le service appelle `trouver(1)` puis `repositoryfindById(1)`
+   - Il vérifie que le livre est disponible
+   - Le contrôleur retourne le livre en JSON avec le code 200
+   - Si le livre est introuvable : 404
+   -  déjà emprunté : 409
+
+   
