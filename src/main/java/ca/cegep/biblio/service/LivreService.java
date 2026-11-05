@@ -45,41 +45,26 @@ public class LivreService {
                 "L'année de publication est invalide");
     }
 }
-    public Livre creer(String titre, String auteur, String isbn, int anneePublication, String categorie) {
-        if (titre == null || titre.isBlank()) {
-            throw new IllegalArgumentException("Le titre est obligatoire");
-        }
-        if (auteur == null || auteur.isBlank()) {
-            throw new IllegalArgumentException("L'auteur est obligatoire");
-        }
-        if (anneePublication < ANNEE_PUBLICATION_MIN
-                || anneePublication > ANNEE_PUBLICATION_MAX) {
-            throw new IllegalArgumentException(
-                    "L'année de publication est invalide");
-        }
-        Livre livre = new Livre(null, titre, auteur, isbn, anneePublication, categorie);
-        return repository.save(livre);
-    }
+public Livre creer(String titre, String auteur, String isbn, int anneePublication, String categorie) {
+    validerLivre(titre, auteur, anneePublication);
 
-    public Livre modifier(Long id, String titre, String auteur, String isbn, int anneePublication, String categorie) {
-        Livre livre = trouver(id);
-        if (titre == null || titre.isBlank()) {
-            throw new IllegalArgumentException("Le titre est obligatoire");
-        }
-        if (auteur == null || auteur.isBlank()) {
-            throw new IllegalArgumentException("L'auteur est obligatoire");
-        }
-        if (anneePublication < 1450 || anneePublication > 2100) {
-            throw new IllegalArgumentException("L'année de publication est invalide");
-        }
-        livre.setTitre(titre);
-        livre.setAuteur(auteur);
-        livre.setIsbn(isbn);
-        livre.setAnneePublication(anneePublication);
-        livre.setCategorie(categorie);
-        return repository.save(livre);
-    }
+    Livre livre = new Livre(
+            null, titre, auteur, isbn, anneePublication, categorie);
 
+    return repository.save(livre);
+
+} public Livre modifier(Long id, String titre, String auteur, String isbn,int anneePublication, String categorie) {
+    Livre livre = trouver(id);
+    validerLivre(titre, auteur, anneePublication);
+
+    livre.setTitre(titre);
+    livre.setAuteur(auteur);
+    livre.setIsbn(isbn);
+    livre.setAnneePublication(anneePublication);
+    livre.setCategorie(categorie);
+
+    return repository.save(livre);
+    }
     public void supprimer(Long id) {
         trouver(id);
         repository.deleteById(id);
